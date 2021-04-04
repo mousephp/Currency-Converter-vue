@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+
+</head>
+
+<body>
+	<div class="jumbotron">
+		<div class="container">
+			<div class="row" id="app">
+				<h1 class="display-3 text-center">ỨNG DỤNG CHUYỂN ĐỔI TIỀN TỆ</h1>
+				<div class="col-md-5">
+					<div class="form-group">
+						<label>Nhập số tiền</label>
+						<input type="number" class="form-control" v-model.number='amount'>
+					</div>
+				</div>
+				<!-- v-model ở select để bắt option được chọn sử dụng cho tính toán -->
+				<div class="col-md-8">
+					<div class="form-group">
+						<label>Chuyển từ</label>
+						<select class="custom-select mr-sm-2" id="inlineFormCustomSelect" v-model='convertFrom'>
+							<option v-for='temp in currencyFrom' v-bind:value='temp.name'>{{temp.desc}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-8">
+					<div class="form-group">
+						<label>Sang</label>
+						<select class="custom-select mr-sm-2" id="inlineFormCustomSelect" v-model='convertTo'>
+							<option v-for='temp in currencyFrom' v-bind:value='temp.name'>{{temp.desc}}</option>
+						</select>
+					</div>
+				</div>
+				<hr>
+				<div class="col-md-8">
+					<label class="col-form-label">Từ {{amount}} {{convertFrom}} Thành {{finalamount}}
+						{{convertTo}}</label>
+				</div>
+			</div>
+		</div>
+		<hr>
+	</div>
+
+
+	<script type="text/javascript">
+		//import ComponentA from './ComponentA'  ==>false
+		new Vue({
+			el: '#app',
+			data: {
+				currencyFrom: [
+					{ name: 'USD', desc: 'US Dollar' },
+					{ name: 'EUR', desc: 'Euro' },
+					{ name: 'VND', desc: 'Vnd' }
+				],
+				convertFrom: 'EUR',
+				convertTo: 'USD',
+				amount: ''
+			},
+			computed: {
+				finalamount: function () {
+					var from = this.convertFrom;
+					var to = this.convertTo;
+					var final = 0;
+					switch (from) {
+						case 'USD':
+							if (to == 'USD') {
+								final = this.amount;
+							}
+							if (to == 'EUR') {
+								final = this.amount * 0.84;
+							}
+							if (to == 'VND') {
+								final = this.amount * 23134;
+							}
+							break;
+
+						case 'EUR':
+							if (to == 'USD') {
+								final = this.amount * 1.19;
+							}
+							if (to == 'EUR') {
+								final = this.amount;
+							}
+							if (to == 'VND') {
+								final = this.amount * 28416.65;
+							}
+							break;
+
+						case 'VND':
+							if (to == 'USD') {
+								final = this.amount * 0.000043;
+							}
+							if (to == 'EUR') {
+								final = this.amount * 0.000035;
+							}
+							if (to == 'VND') {
+								final = this.amount;
+							}
+							break;
+					}
+					return final;
+				}
+			}
+		});
+	</script>
+
+
+</body>
+
+</html>
